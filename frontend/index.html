@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Student Management System</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+<div class="max-w-6xl mx-auto p-6">
+  <h1 class="text-3xl font-bold text-center mb-6 text-blue-700">
+    Student Management Dashboard
+  </h1>
+
+  <!-- Add Student -->
+  <div class="bg-white p-6 rounded shadow mb-6">
+    <h2 class="text-xl font-semibold mb-4">Add / Edit Student</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <input id="name" placeholder="Name" class="border p-2 rounded"/>
+      <input id="email" placeholder="Email" class="border p-2 rounded"/>
+      <input id="age" type="number" placeholder="Age" class="border p-2 rounded"/>
+      <select id="classId" class="border p-2 rounded"></select>
+    </div>
+    <button id="saveBtn" onclick="saveStudent()"
+      class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Add Student
+    </button>
+  </div>
+
+  <!-- Class Management -->
+  <div class="bg-white p-6 rounded shadow mb-6">
+    <h2 class="text-xl font-semibold mb-4">Class Management</h2>
+    <div class="flex gap-3 mb-4">
+      <input id="className" placeholder="Class Name" class="border p-2 rounded flex-1"/>
+      <button onclick="addClass()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        Save
+      </button>
+    </div>
+    <ul id="classList" class="space-y-2"></ul>
+  </div>
+
+  <!-- Student Table -->
+  <div class="bg-white p-6 rounded shadow">
+    <input id="search" onkeyup="loadStudents()" placeholder="Search..."
+      class="border p-2 rounded mb-4 w-full"/>
+
+    <table class="w-full border">
+      <thead class="bg-gray-200">
+        <tr>
+          <th onclick="sortBy('name')" class="p-2 cursor-pointer">Name</th>
+          <th class="p-2">Email</th>
+          <th onclick="sortBy('age')" class="p-2 cursor-pointer">Age</th>
+          <th class="p-2">Class</th>
+          <th class="p-2">Action</th>
+        </tr>
+      </thead>
+      <tbody id="students"></tbody>
+    </table>
+
+    <div class="flex justify-center gap-4 mt-4">
+      <button onclick="prev()" class="bg-gray-300 px-4 py-2 rounded">Prev</button>
+      <span id="page">1</span>
+      <button onclick="next()" class="bg-gray-300 px-4 py-2 rounded">Next</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
