@@ -253,9 +253,7 @@
           onclick="window.print()"
           class="print-btn"
         >
-
           Print Report Card
-
         </button>
 
       </div>
@@ -319,7 +317,10 @@
 
       } catch(error) {
 
-        console.log(error);
+        console.log(
+          "Error loading students:",
+          error
+        );
 
       }
 
@@ -338,7 +339,7 @@
 
         if (!studentId) return;
 
-        /* ---------- FETCH STUDENTS ---------- */
+        /* ---------- FETCH STUDENT ---------- */
 
         const studentRes =
           await fetch(
@@ -353,20 +354,20 @@
             s => s.id == studentId
           );
 
-        /* ---------- FETCH RESULTS ---------- */
+        /* ---------- FETCH RESULTS BY STUDENT ---------- */
 
         const resultRes =
           await fetch(
-            `${API}/results`
+            `${API}/results?studentId=${studentId}`
           );
-
-        const results =
-          await resultRes.json();
 
         const filtered =
-          results.filter(
-            r => r.studentId == studentId
-          );
+          await resultRes.json();
+
+        console.log(
+          "Results fetched:",
+          filtered
+        );
 
         /* ---------- STUDENT INFO ---------- */
 
@@ -375,51 +376,23 @@
         ).innerHTML = `
 
           <div class="info-box">
-
-            <h3>
-              Student Name
-            </h3>
-
-            <p>
-              ${student.name}
-            </p>
-
+            <h3>Student Name</h3>
+            <p>${student.name}</p>
           </div>
 
           <div class="info-box">
-
-            <h3>
-              Email
-            </h3>
-
-            <p>
-              ${student.email}
-            </p>
-
+            <h3>Email</h3>
+            <p>${student.email}</p>
           </div>
 
           <div class="info-box">
-
-            <h3>
-              Class
-            </h3>
-
-            <p>
-              ${student.Class.name}
-            </p>
-
+            <h3>Class</h3>
+            <p>${student.Class ? student.Class.name : "-"}</p>
           </div>
 
           <div class="info-box">
-
-            <h3>
-              Subjects
-            </h3>
-
-            <p>
-              ${filtered.length}
-            </p>
-
+            <h3>Subjects</h3>
+            <p>${filtered.length}</p>
           </div>
 
         `;
@@ -435,40 +408,42 @@
 
         let total = 0;
 
-        filtered.forEach(result => {
+        if (filtered.length === 0) {
 
-          total += result.marks;
-
-          const tr =
-            document.createElement(
-              "tr"
-            );
-
-          tr.innerHTML = `
-
-            <td>
-              ${result.subject}
-            </td>
-
-            <td>
-              ${result.marks}
-            </td>
-
-            <td>
-
-              <span class="grade-badge">
-
-                ${result.grade}
-
-              </span>
-
-            </td>
-
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="3" style="text-align:center;">
+                No results found for this student
+              </td>
+            </tr>
           `;
 
-          tbody.appendChild(tr);
+        } else {
 
-        });
+          filtered.forEach(result => {
+
+            total += result.marks;
+
+            const tr =
+              document.createElement(
+                "tr"
+              );
+
+            tr.innerHTML = `
+              <td>${result.subject}</td>
+              <td>${result.marks}</td>
+              <td>
+                <span class="grade-badge">
+                  ${result.grade}
+                </span>
+              </td>
+            `;
+
+            tbody.appendChild(tr);
+
+          });
+
+        }
 
         /* ---------- TOTAL ---------- */
 
@@ -480,20 +455,17 @@
 
         const average =
           filtered.length
-          ? total / filtered.length
-          : 0;
+            ? total / filtered.length
+            : 0;
 
         let grade = "F";
 
         if (average >= 90)
           grade = "A+";
-
         else if (average >= 80)
           grade = "A";
-
         else if (average >= 70)
           grade = "B";
-
         else if (average >= 60)
           grade = "C";
 
@@ -509,7 +481,10 @@
 
       } catch(error) {
 
-        console.log(error);
+        console.log(
+          "Error loading report card:",
+          error
+        );
 
       }
 

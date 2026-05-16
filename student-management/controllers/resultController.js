@@ -20,12 +20,10 @@ exports.addResult =
 
       const result =
         await Result.create({
-
           studentId,
           subject,
           marks,
           grade
-
         });
 
       res.status(201).json(result);
@@ -33,10 +31,7 @@ exports.addResult =
     } catch(error) {
 
       res.status(500).json({
-
-        message:
-          error.message
-
+        message: error.message
       });
 
     }
@@ -50,11 +45,17 @@ exports.getResults =
 
     try {
 
+      const where = {};
+
+      if (req.query.studentId) {
+        where.studentId =
+          req.query.studentId;
+      }
+
       const results =
         await Result.findAll({
-
+          where,
           include: Student
-
         });
 
       res.json(results);
@@ -62,10 +63,7 @@ exports.getResults =
     } catch(error) {
 
       res.status(500).json({
-
-        message:
-          error.message
-
+        message: error.message
       });
 
     }

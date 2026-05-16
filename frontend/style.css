@@ -48,10 +48,10 @@ body {
   background:
     linear-gradient(
       135deg,
-      #f8fafc,
-      #eff6ff
+      #2057cc,
+      #112f81
     );
-
+ 
   color: var(--text);
 
   min-height: 100vh;
@@ -627,6 +627,7 @@ details p {
 
 }
 
+
 /* ---------- QUICK ACTIONS ---------- */
 
 .quick-actions {
@@ -637,6 +638,8 @@ details p {
     repeat(auto-fit, minmax(200px, 1fr));
 
   gap: 20px;
+
+  padding: 20px 0;
 
 }
 
@@ -653,7 +656,7 @@ details p {
 
   text-decoration: none;
 
-  padding: 18px;
+  padding: 24px 18px;
 
   border-radius: 14px;
 
@@ -661,7 +664,12 @@ details p {
 
   font-weight: 600;
 
+  font-size: 15px;
+
   transition: 0.25s;
+
+  box-shadow:
+    0 4px 15px rgba(37,99,235,0.2);
 
 }
 
@@ -669,7 +677,11 @@ details p {
 
   transform: translateY(-3px);
 
+  box-shadow:
+    0 8px 25px rgba(37,99,235,0.35);
+
 }
+
 
 /* ---------- PROFILE ---------- */
 
@@ -892,6 +904,8 @@ meter {
 
   text-align: center;
 
+  color: #cbd5e1;
+
   padding: 24px;
 
   margin-top: 40px;
@@ -995,4 +1009,10 @@ meter {
   max-width: 1400px;
   padding-left: 40px;
   padding-right: 40px;
+}
+
+
+main.container {
+  margin-top: 2rem;
+  padding-top: 1rem;
 }
