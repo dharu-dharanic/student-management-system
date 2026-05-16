@@ -1,72 +1,403 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Student Management System</title>
-<script src="https://cdn.tailwindcss.com"></script>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>
+    Student Management System
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
 </head>
 
-<body class="bg-gray-100 min-h-screen">
+<body>
 
-<div class="max-w-6xl mx-auto p-6">
-  <h1 class="text-3xl font-bold text-center mb-6 text-blue-700">
-    Student Management Dashboard
-  </h1>
+  <!-- HEADER -->
 
-  <!-- Add Student -->
-  <div class="bg-white p-6 rounded shadow mb-6">
-    <h2 class="text-xl font-semibold mb-4">Add / Edit Student</h2>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <input id="name" placeholder="Name" class="border p-2 rounded"/>
-      <input id="email" placeholder="Email" class="border p-2 rounded"/>
-      <input id="age" type="number" placeholder="Age" class="border p-2 rounded"/>
-      <select id="classId" class="border p-2 rounded"></select>
+  <header class="top-header">
+
+    <div class="container header-flex">
+
+      <div>
+
+        <h1>
+          Student Management System
+        </h1>
+
+        <p class="subtitle">
+
+          Manage student records, attendance, and academic performance
+
+        </p>
+
+      </div>
+
+      <!-- NAVIGATION -->
+
+      <nav aria-label="Main Navigation">
+
+        <ul class="nav-links">
+
+          <li>
+            <a href="dashboard.html">
+              Dashboard
+            </a>
+          </li>
+
+          <li>
+            <a href="index.html">
+              Students
+            </a>
+          </li>
+
+          <li>
+            <a href="profile.html">
+              Profile
+            </a>
+          </li>
+
+          <li>
+            <a href="attendance.html">
+              Attendance
+            </a>
+          </li>
+
+          <li>
+            <a href="result.html">
+              Results
+            </a>
+          </li>
+
+          <li>
+            <a href="reportcard.html">
+              Report Card
+            </a>
+          </li>
+
+        </ul>
+
+      </nav>
+
     </div>
-    <button id="saveBtn" onclick="saveStudent()"
-      class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-      Add Student
-    </button>
-  </div>
 
-  <!-- Class Management -->
-  <div class="bg-white p-6 rounded shadow mb-6">
-    <h2 class="text-xl font-semibold mb-4">Class Management</h2>
-    <div class="flex gap-3 mb-4">
-      <input id="className" placeholder="Class Name" class="border p-2 rounded flex-1"/>
-      <button onclick="addClass()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-        Save
-      </button>
-    </div>
-    <ul id="classList" class="space-y-2"></ul>
-  </div>
+  </header>
 
-  <!-- Student Table -->
-  <div class="bg-white p-6 rounded shadow">
-    <input id="search" onkeyup="loadStudents()" placeholder="Search..."
-      class="border p-2 rounded mb-4 w-full"/>
+  <!-- MAIN -->
 
-    <table class="w-full border">
-      <thead class="bg-gray-200">
-        <tr>
-          <th onclick="sortBy('name')" class="p-2 cursor-pointer">Name</th>
-          <th class="p-2">Email</th>
-          <th onclick="sortBy('age')" class="p-2 cursor-pointer">Age</th>
-          <th class="p-2">Class</th>
-          <th class="p-2">Action</th>
-        </tr>
-      </thead>
-      <tbody id="students"></tbody>
-    </table>
+  <main class="container">
 
-    <div class="flex justify-center gap-4 mt-4">
-      <button onclick="prev()" class="bg-gray-300 px-4 py-2 rounded">Prev</button>
-      <span id="page">1</span>
-      <button onclick="next()" class="bg-gray-300 px-4 py-2 rounded">Next</button>
-    </div>
-  </div>
-</div>
+    <!-- STUDENT FORM -->
 
-<script src="script.js"></script>
+    <section class="card">
+
+      <header>
+
+        <h2>
+          Add / Edit Student
+        </h2>
+
+      </header>
+
+      <form id="studentForm">
+
+        <fieldset>
+
+          <legend>
+            Student Information
+          </legend>
+
+          <div class="form-grid">
+
+            <!-- NAME -->
+
+            <input
+              id="name"
+              type="text"
+              placeholder="Enter Student Name"
+              required
+              minlength="3"
+              autocomplete="name"
+            />
+
+            <!-- EMAIL -->
+
+            <input
+              id="email"
+              type="email"
+              placeholder="Enter Email"
+              required
+              autocomplete="email"
+            />
+
+            <!-- AGE -->
+
+            <input
+              id="age"
+              type="number"
+              placeholder="Enter Age"
+              required
+              min="1"
+              max="100"
+            />
+
+            <!-- CLASS -->
+
+            <select
+              id="classId"
+              required
+            >
+            </select>
+
+          </div>
+
+          <button
+            type="button"
+            id="saveBtn"
+            onclick="saveStudent()"
+          >
+
+            Add Student
+
+          </button>
+
+        </fieldset>
+
+      </form>
+
+    </section>
+
+    <!-- CLASS MANAGEMENT -->
+
+    <section class="card">
+
+      <header>
+
+        <h2>
+          Class Management
+        </h2>
+
+      </header>
+
+      <fieldset>
+
+        <legend>
+          Add / Edit Class
+        </legend>
+
+        <div class="flex-row">
+
+          <input
+            id="className"
+            type="text"
+            placeholder="Enter Class Name"
+            required
+          />
+
+          <button
+            type="button"
+            onclick="addClass()"
+          >
+
+            Save Class
+
+          </button>
+
+        </div>
+
+      </fieldset>
+
+      <ul id="classList"></ul>
+
+    </section>
+
+    <!-- STUDENT RECORDS -->
+
+    <section class="card">
+
+      <header>
+
+        <h2>
+          Student Records
+        </h2>
+
+      </header>
+
+      <!-- SEARCH -->
+
+      <input
+        id="search"
+        type="search"
+        list="studentSuggestions"
+        onkeyup="loadStudents()"
+        placeholder="Search Students..."
+      />
+
+      <datalist id="studentSuggestions"></datalist>
+
+      <!-- TABLE -->
+
+      <table>
+
+        <caption>
+          Student Details Table
+        </caption>
+
+        <thead>
+
+          <tr>
+
+            <th onclick="sortBy('name')">
+              Name
+            </th>
+
+            <th>
+              Email
+            </th>
+
+            <th onclick="sortBy('age')">
+              Age
+            </th>
+
+            <th>
+              Class
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="students">
+
+        </tbody>
+
+        <tfoot>
+
+          <tr>
+
+            <td colspan="5">
+
+              Student Management System Records
+
+            </td>
+
+          </tr>
+
+        </tfoot>
+
+      </table>
+
+      <!-- PAGINATION -->
+
+      <nav
+        class="pagination"
+        aria-label="Pagination Navigation"
+      >
+
+        <button onclick="prev()">
+
+          Prev
+
+        </button>
+
+        <span id="page">
+
+          1
+
+        </span>
+
+        <button onclick="next()">
+
+          Next
+
+        </button>
+
+      </nav>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="card">
+
+      <header>
+
+        <h2>
+          Frequently Asked Questions
+        </h2>
+
+      </header>
+
+      <details>
+
+        <summary>
+          How do I add a student?
+        </summary>
+
+        <p>
+          Fill the form and click the Add Student button.
+        </p>
+
+      </details>
+
+      <details>
+
+        <summary>
+          How do I edit a student?
+        </summary>
+
+        <p>
+          Click the edit button beside the student record.
+        </p>
+
+      </details>
+
+      <details>
+
+        <summary>
+          How do I delete a student?
+        </summary>
+
+        <p>
+          Click the delete button beside the student record.
+        </p>
+
+      </details>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer class="footer">
+
+    <p>
+
+      © 2026 Student Management System
+
+    </p>
+
+  </footer>
+
+  <!-- SCRIPT -->
+
+  <script src="script.js"></script>
+
 </body>
+
 </html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>
+    Attendance Management
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
+</head>
+
+<body>
+
+  <!-- HEADER -->
+
+  <header class="top-header">
+
+    <div class="container header-flex">
+
+      <div class="brand-section">
+
+        <h1>
+          Attendance Management
+        </h1>
+
+        <p class="subtitle">
+          Track and manage daily student attendance
+        </p>
+
+      </div>
+
+      <!-- NAVIGATION -->
+
+      <nav aria-label="Main Navigation">
+
+        <ul class="nav-links">
+
+          <li>
+            <a href="dashboard.html">
+              Dashboard
+            </a>
+          </li>
+
+          <li>
+            <a href="index.html">
+              Students
+            </a>
+          </li>
+
+          <li>
+            <a href="profile.html">
+              Profile
+            </a>
+          </li>
+
+          <li>
+            <a href="attendance.html" class="active-link">
+              Attendance
+            </a>
+          </li>
+
+          <li>
+            <a href="result.html">
+              Results
+            </a>
+          </li>
+
+          <li>
+            <a href="reportcard.html">
+              Report Card
+            </a>
+          </li>
+
+        </ul>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+  <!-- MAIN -->
+
+  <main class="container">
+
+    <!-- ATTENDANCE CARD -->
+
+    <section class="card">
+
+      <header class="section-header">
+
+        <div>
+
+          <h2>
+            Mark Attendance
+          </h2>
+
+          <p class="section-subtitle">
+            Select present or absent for each student
+          </p>
+
+        </div>
+
+      </header>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <caption>
+            Student Attendance Records
+          </caption>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Student Name
+              </th>
+
+              <th>
+                Class
+              </th>
+
+              <th>
+                Present
+              </th>
+
+              <th>
+                Absent
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="attendanceTable">
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <div class="attendance-action">
+
+        <button
+          onclick="submitAttendance()"
+          class="primary-btn"
+        >
+
+          Submit Attendance
+
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer class="footer">
+
+    <p>
+      © 2026 Student Management System
+    </p>
+
+  </footer>
+
+  <!-- SCRIPT -->
+
+  <script>
+
+    const API =
+      "http://localhost:5000";
+
+    let students = [];
+
+    /* ---------- LOAD STUDENTS ---------- */
+
+    async function loadStudents() {
+
+      try {
+
+        const res =
+          await fetch(
+            `${API}/students?page=1&limit=100`
+          );
+
+        const data =
+          await res.json();
+
+        students =
+          data.students;
+
+        const tbody =
+          document.getElementById(
+            "attendanceTable"
+          );
+
+        tbody.innerHTML = "";
+
+        students.forEach(student => {
+
+          const tr =
+            document.createElement("tr");
+
+          tr.innerHTML = `
+
+            <td>
+              ${student.name}
+            </td>
+
+            <td>
+              ${student.Class.name}
+            </td>
+
+            <td class="attendance-cell">
+
+              <input
+                type="radio"
+                name="attendance-${student.id}"
+                value="Present"
+                checked
+              />
+
+            </td>
+
+            <td class="attendance-cell">
+
+              <input
+                type="radio"
+                name="attendance-${student.id}"
+                value="Absent"
+              />
+
+            </td>
+
+          `;
+
+          tbody.appendChild(tr);
+
+        });
+
+      } catch(error) {
+
+        console.log(error);
+
+        alert(
+          "Failed to load students"
+        );
+
+      }
+
+    }
+
+    /* ---------- SUBMIT ATTENDANCE ---------- */
+
+    async function submitAttendance() {
+
+      try {
+
+        const today =
+          new Date()
+          .toISOString()
+          .split("T")[0];
+
+        for (const student of students) {
+
+          const status =
+            document.querySelector(
+              `input[name="attendance-${student.id}"]:checked`
+            ).value;
+
+          await fetch(
+            `${API}/attendance`,
+            {
+
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+
+                studentId:
+                  student.id,
+
+                status,
+
+                date: today
+
+              })
+
+            }
+          );
+
+        }
+
+        alert(
+          "Attendance submitted successfully"
+        );
+
+      } catch(error) {
+
+        console.log(error);
+
+        alert(
+          "Failed to submit attendance"
+        );
+
+      }
+
+    }
+
+    /* ---------- INIT ---------- */
+
+    loadStudents();
+
+  </script>
+
+</body>
+
+</html>

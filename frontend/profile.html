@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>
+    Student Profile
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
+</head>
+
+<body>
+
+  <!-- HEADER -->
+
+  <header class="top-header">
+
+    <div class="container header-flex">
+
+      <div>
+
+        <h1>
+          SMS Portal
+        </h1>
+
+        <p class="subtitle">
+
+          Student profile and academic overview
+
+        </p>
+
+      </div>
+
+      <!-- NAVIGATION -->
+
+      <nav aria-label="Main Navigation">
+
+        <ul class="nav-links">
+
+          <li>
+            <a href="dashboard.html">
+              Dashboard
+            </a>
+          </li>
+
+          <li>
+            <a href="index.html">
+              Students
+            </a>
+          </li>
+
+          <li>
+            <a href="profile.html">
+              Profile
+            </a>
+          </li>
+
+          <li>
+            <a href="attendance.html">
+              Attendance
+            </a>
+          </li>
+
+          <li>
+            <a href="result.html">
+              Results
+            </a>
+          </li>
+
+          <li>
+            <a href="reportcard.html">
+              Report Card
+            </a>
+          </li>
+
+        </ul>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+  <!-- MAIN -->
+
+  <main class="container">
+
+    <!-- SELECT STUDENT -->
+
+    <section class="card">
+
+      <header>
+
+        <h2>
+          Select Student
+        </h2>
+
+      </header>
+
+      <label for="studentSelect">
+
+        Choose Student
+
+      </label>
+
+      <select
+        id="studentSelect"
+        onchange="loadProfile()"
+      >
+
+        <option value="">
+          -- Select Student --
+        </option>
+
+      </select>
+
+    </section>
+
+    <!-- PROFILE CARD -->
+
+    <section
+      class="card profile-card"
+    >
+
+      <!-- PROFILE IMAGE -->
+
+      <figure class="profile-figure">
+
+        <img
+          src="https://via.placeholder.com/140"
+          alt="Student Avatar"
+          id="profileImage"
+          class="profile-image"
+        />
+
+        <figcaption>
+
+          Student Profile
+
+        </figcaption>
+
+      </figure>
+
+      <!-- PROFILE DETAILS -->
+
+      <div class="profile-details">
+
+        <h2>
+          Student Information
+        </h2>
+
+        <dl id="profileData">
+
+          <dt>
+            Name
+          </dt>
+
+          <dd>
+            -
+          </dd>
+
+          <dt>
+            Email
+          </dt>
+
+          <dd>
+            -
+          </dd>
+
+          <dt>
+            Age
+          </dt>
+
+          <dd>
+            -
+          </dd>
+
+          <dt>
+            Class
+          </dt>
+
+          <dd>
+            -
+          </dd>
+
+        </dl>
+
+        <!-- PERFORMANCE -->
+
+        <section class="profile-extra">
+
+          <h3>
+            Academic Performance
+          </h3>
+
+          <label for="performanceProgress">
+
+            Overall Performance
+
+          </label>
+
+          <progress
+            id="performanceProgress"
+            value="0"
+            max="100"
+          >
+          </progress>
+
+          <br /><br />
+
+          <label for="attendanceMeter">
+
+            Attendance Percentage
+
+          </label>
+
+          <meter
+            id="attendanceMeter"
+            min="0"
+            max="100"
+            value="0"
+          >
+          </meter>
+
+        </section>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer class="footer">
+
+    <p>
+
+      © 2026 Student Management System
+
+    </p>
+
+  </footer>
+
+  <!-- SCRIPT -->
+
+  <script>
+
+    const API =
+      "http://localhost:5000";
+
+    /* ---------- LOAD STUDENTS ---------- */
+
+    async function loadStudentsDropdown() {
+
+      try {
+
+        const res =
+          await fetch(
+            `${API}/students`
+          );
+
+        const data =
+          await res.json();
+
+        const select =
+          document.getElementById(
+            "studentSelect"
+          );
+
+        data.students.forEach(student => {
+
+          const option =
+            document.createElement(
+              "option"
+            );
+
+          option.value =
+            student.id;
+
+          option.textContent =
+            student.name;
+
+          select.appendChild(option);
+
+        });
+
+      } catch(error) {
+
+        console.log(error);
+
+      }
+
+    }
+
+    /* ---------- LOAD PROFILE ---------- */
+
+    async function loadProfile() {
+
+      try {
+
+        const id =
+          document.getElementById(
+            "studentSelect"
+          ).value;
+
+        if (!id) return;
+
+        const res =
+          await fetch(
+            `${API}/students`
+          );
+
+        const data =
+          await res.json();
+
+        const student =
+          data.students.find(
+            s => s.id == id
+          );
+
+        /* ---------- PROFILE DETAILS ---------- */
+
+        const profileData =
+          document.getElementById(
+            "profileData"
+          );
+
+        profileData.innerHTML = `
+
+          <dt>Name</dt>
+          <dd>${student.name}</dd>
+
+          <dt>Email</dt>
+          <dd>${student.email}</dd>
+
+          <dt>Age</dt>
+          <dd>${student.age}</dd>
+
+          <dt>Class</dt>
+          <dd>${student.Class.name}</dd>
+
+        `;
+
+        /* ---------- DEMO ANALYTICS ---------- */
+
+        const performance =
+          Math.floor(
+            Math.random() * 20
+          ) + 80;
+
+        const attendance =
+          Math.floor(
+            Math.random() * 15
+          ) + 85;
+
+        document.getElementById(
+          "performanceProgress"
+        ).value = performance;
+
+        document.getElementById(
+          "attendanceMeter"
+        ).value = attendance;
+
+      } catch(error) {
+
+        console.log(error);
+
+      }
+
+    }
+
+    /* ---------- INIT ---------- */
+
+    loadStudentsDropdown();
+
+  </script>
+
+</body>
+
+</html>
